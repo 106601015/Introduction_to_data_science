@@ -1,10 +1,11 @@
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import LabelEncoder
 import sklearn.metrics
 import numpy as np
 import math
-
+import pandas as pd
 
 class Node:
     """A decision tree node."""
@@ -223,10 +224,13 @@ class DecisionTreeClassifier:
         return pred
 
 def load_train_test_data(test_ratio=.3, random_state = 1):
-    iris = datasets.load_iris()
-    X = iris.data
-    y = iris.target
-    sc = StandardScaler()
+    balance_scale = pd.read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/balance-scale/balance-scale.data",
+            names=['Class Name', 'Left-Weigh', 'Left-Distance', 'Right-Weigh','Right-Distance'],header=None)
+
+    class_le = LabelEncoder()
+    balance_scale['Class Name'] = class_le.fit_transform(balance_scale['Class Name'].values)
+    X = balance_scale.iloc[:,1:].values
+    y = balance_scale['Class Name'].values
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size = test_ratio, random_state=random_state, stratify=y)
     return X_train, X_test, y_train, y_test
