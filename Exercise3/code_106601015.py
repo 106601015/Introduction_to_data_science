@@ -56,7 +56,7 @@ def gradient_descent(X, y, alpha = .001, iters = 100000, eps=1e-4):
             times += 1
 
             # break condition
-            if times % 1000 == 0:print(times)
+            if times % 1000 == 0:break
             if times >= iters:
                 print('times over iters')
                 break
